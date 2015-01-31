@@ -1,31 +1,21 @@
-FROM ubuntu:trusty
+FROM mikumi/java:oracle-jdk8
 MAINTAINER Michael Kuck <me@michael-kuck.com>
 
-ENV DEBIAN_FRONTEND noninteractive
-
-# Install Java.
-RUN apt-get install -y software-properties-common
-RUN \
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-  add-apt-repository -y ppa:webupd8team/java && \
-  apt-get update && \
-  apt-get install -y oracle-java8-installer && \
-  rm -rf /var/lib/apt/lists/* && \
-  rm -rf /var/cache/oracle-jdk8-installer
-
-# Define commonly used JAVA_HOME variable
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+RUN useradd -ms /bin/bash service
 
 ADD open-flights-webservice /open-flights-webservice
 
 # Exposed ENV
-ENV SQL_HOST localhost
-ENV SQL_PORT 3306
-ENV SQL_USER admin
-ENV SQL_PW 0
-ENV SQL_DB open_flights
+ENV OPENFLIGHTS_SQL_HOST localhost
+ENV OPENFLIGHTS_SQL_PORT 3306
+ENV OPENFLIGHTS_SQL_USER admin
+ENV OPENFLIGHTS_SQL_PW 0
+ENV OPENFLIGHTS_SQL_DB open_flights
 
-EXPOSE 8881
+EXPOSE 8891
 
 WORKDIR /open-flights-webservice
-CMD ["/open-flights-webservice/startService.sh"]
+
+USER service
+
+CMD java -Xms64m -Xmx512m -jar open-flights-webservice.jar -log DEBUG -sqlhost "$OPENFLIGHTS_SQL_HOST" -sqlport "$OPENFLIGHTS_SQL_PORT" -sqluser "$OPENFLIGHTS_SQL_USER" -sqldb "$OPENFLIGHTS_SQL_DB"

@@ -1,7 +1,7 @@
-FROM mikumi/java:oracle-jdk8
+FROM openjdk:9-jre-alpine
 MAINTAINER Michael Kuck <me@michael-kuck.com>
 
-RUN useradd -ms /bin/bash service
+RUN addgroup -S service && adduser -S service -G service
 
 ADD open-flights-webservice /open-flights-webservice
 

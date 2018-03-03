@@ -1,4 +1,4 @@
-FROM openjdk:9-jre-alpine
+FROM openjdk:8-jre-alpine
 MAINTAINER Michael Kuck <me@michael-kuck.com>
 
 RUN addgroup -S service && adduser -S service -G service

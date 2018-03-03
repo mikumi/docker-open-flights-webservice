@@ -3,7 +3,7 @@ MAINTAINER Michael Kuck <me@michael-kuck.com>
 
 RUN addgroup -S service && adduser -S service -G service
 
-ADD open-flights-webservice /open-flights-webservice
+COPY open-flights-webservice /open-flights-webservice
 
 # Exposed ENV
 ENV OPENFLIGHTS_SQL_HOST localhost
